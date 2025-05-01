@@ -1,32 +1,70 @@
 # 🐶 Dog Breed Classifier
 
-A local web app that predicts the breed of a dog (or the breed you resemble!) using a deep learning model based on Xception architecture.
-
-Built as part of the Udacity Dog Breed Classification project.
+This project implements a complete pipeline to classify dog breeds using deep learning and computer vision. It was developed as part of the [Udacity Machine Learning Engineer Nanodegree](https://www.udacity.com/course/machine-learning-engineer-nanodegree--nd009t).
 
 ---
 
-## 🚀 Features
+## 📌 Project Overview
 
-- Upload an image or use sample test images  
-- Detect if the image contains a human or a dog  
-- Predict the closest dog breed using a fine-tuned CNN (Xception)  
-- Show example images of the predicted breed  
-- Clean and lightweight Streamlit interface  
-- Runs **fully offline** on your local machine  
+The goal of the project is to build a system that can:
 
----
+- Detect whether an image contains a dog or a human
+- If a dog is detected, classify its breed
+- If a human is detected, predict the dog breed they resemble most
 
-## 🧠 Model Details
-
-- Pretrained Xception model (ImageNet)  
-- Custom classifier trained on 133 dog breeds  
-- Uses OpenCV for human face detection  
-- Uses ResNet50 for dog detection (ImageNet label ranges 151–268)  
+This pipeline integrates:
+- Face detection (OpenCV)
+- Dog detection (ResNet50 pretrained on ImageNet)
+- Fine-tuned CNN model (Xception) trained to classify dog breeds
 
 ---
 
-## 🛠 How to Run
+## 🧪 Steps Performed
+
+1. **Face Detection**  
+   - Used OpenCV Haar cascades to detect human faces  
+2. **Dog Detection**  
+   - Used ResNet50 to classify images and detect dog class labels (151–268 on ImageNet)
+3. **Model Development**  
+   - Extracted bottleneck features from pretrained Xception model
+   - Trained a custom fully connected layer on top to classify 133 dog breeds
+4. **Model Evaluation**  
+   - Achieved high accuracy (~83–85%) on validation and test sets
+   - Explored alternative models (ResNet, VGG, Inception) before finalizing Xception
+5. **Web App Integration**  
+   - Created a Streamlit interface to upload images or choose samples
+   - Visualizes predicted breed with sample images of that breed
+
+---
+
+## ✅ Results Summary
+
+### Final Test Accuracy Results for All Models
+
+| Model                      | Test Accuracy |
+|---------------------------|----------------|
+| Custom CNN (from scratch) | **5.77%**       |
+| VGG16                     | 69.46%         |
+| VGG19                     | 63.11%         |
+| ResNet50                  | 76.89%         |
+| InceptionV3               | 77.37%         |
+| Xception                  | 81.56%         |
+| Xception (augmented)      | **84.91%**     |
+
+> 🧪 For deployment simplicity, the app uses **Xception without augmentation**, but the best model during experimentation was **Xception with augmentation**.
+
+#### 📝 Observations
+
+- The **custom model trained from scratch** performed poorly (5.77%), confirming that a simple CNN lacks the capacity to learn this complex task without transfer learning or data augmentation.
+- All **pretrained models** significantly outperform the custom model, benefiting from prior learning on ImageNet.
+- Among the non-augmented models, **Xception** achieves the highest accuracy (81.56%), followed closely by InceptionV3 and ResNet50.
+- The **Xception model trained with image augmentation** yields the **best overall performance (84.91%)**, demonstrating that data augmentation helps improve generalization by exposing the model to more varied training examples.
+
+These results highlight the strength of transfer learning and show that both model architecture and data strategy (e.g., augmentation) play a crucial role in improving classification performance.
+
+---
+
+## 🛠 How to Run the App
 
 ### 1. Clone this repo
 
@@ -35,13 +73,14 @@ git clone https://github.com/yakupakkaya/dog-breed-classifier.git
 cd dog-breed-classifier
 ```
 
-### 2. Install requirements
+### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> ✅ Ensure you're using Python 3.9+ in a virtual environment
+> ✅ Python 3.9+ is recommended  
+> ✅ Use a virtual environment
 
 ### 3. Run the Streamlit app
 
@@ -64,49 +103,39 @@ dog-breed-classifier/
     └── weights.best.Xception.hdf5
 ```
 
-> Image folders like `dog_subset/` and `sample_images/` are excluded to keep the repo lightweight.
+---
+
+## 📦 External Files Required
+
+Download the following before running the app:
+
+| Resource                       | Description                  | Location                        |
+|--------------------------------|------------------------------|----------------------------------|
+| `weights.best.Xception.hdf5`   | Trained model weights        | [Insert your Google Drive link] |
+| `dog_subset/` (optional)       | Sample breed images          | [Insert link or skip]           |
+| `sample_images/` (optional)    | Sample input test images     | [Insert link or skip]           |
 
 ---
 
-## 📦 Required Files (External)
+## 🧠 Model Details
 
-You must download the following manually to run the app fully:
-
-| Resource                       | Description              | Location                        |
-|--------------------------------|--------------------------|----------------------------------|
-| `weights.best.Xception.hdf5`   | Fine-tuned model weights | [Insert your Google Drive link] |
-| `dog_subset/` (optional)       | Sample breed images      | [Insert link]                   |
-| `sample_images/` (optional)    | Sample test inputs       | [Insert link]                   |
+- **Base CNN**: Xception pretrained on ImageNet
+- **Classifier**: Fully connected layer trained on 133 breeds
+- **Training Data**: Subset from Udacity-provided `dogImages/` dataset
+- **Evaluation Metrics**: Accuracy, misclassification examples, human-vs-dog analysis
 
 ---
 
-## ✅ Example Use
+## 💡 Future Work
 
-Upload a photo of a dog or a human face, and the app will:
-
-- Classify the dog breed  
-- If it's a human, suggest which dog breed you resemble  
-- Show reference images of the predicted breed  
-
----
-
-## 💡 Future Improvements
-
-- Replace ResNet50 dog detector with a custom dog-specific detector  
-- Add multiple model options (e.g., ResNet, MobileNet)  
-- Deploy to Hugging Face or Streamlit Cloud  
-
----
-
-## 📜 License
-
-This project is for educational use (Udacity ML Nanodegree) and personal experimentation only.
+- Replace ResNet dog detector with lightweight YOLOv8 or MobileNet
+- Add real-time camera input support
+- Deploy app to Hugging Face Spaces or Streamlit Cloud
 
 ---
 
 ## 🙏 Acknowledgements
 
-- [Udacity](https://www.udacity.com/)  
-- [Keras](https://keras.io/)  
-- [TensorFlow](https://www.tensorflow.org/)  
+- [Udacity](https://www.udacity.com/) for project support
+- [Keras](https://keras.io/) + [TensorFlow](https://www.tensorflow.org/) for modeling
 - [OpenCV](https://opencv.org/) for face detection
