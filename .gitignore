@@ -1,0 +1,11 @@
+# Virtual environment, Python cache
+dog_app/
+__pycache__/
+dogbc/
+
+# Optional: temporary folders
+temp_upload/
+
+# Ignore zip files
+*.zip
+
