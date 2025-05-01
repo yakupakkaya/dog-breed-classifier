@@ -105,18 +105,6 @@ dog-breed-classifier/
 
 ---
 
-## 📦 External Files Required
-
-Download the following before running the app:
-
-| Resource                       | Description                  | Location                        |
-|--------------------------------|------------------------------|----------------------------------|
-| `weights.best.Xception.hdf5`   | Trained model weights        | [Insert your Google Drive link] |
-| `dog_subset/` (optional)       | Sample breed images          | [Insert link or skip]           |
-| `sample_images/` (optional)    | Sample input test images     | [Insert link or skip]           |
-
----
-
 ## 🧠 Model Details
 
 - **Base CNN**: Xception pretrained on ImageNet
